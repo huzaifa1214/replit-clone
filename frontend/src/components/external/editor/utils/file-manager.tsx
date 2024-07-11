@@ -54,11 +54,13 @@ export function findFileByName(
   return targetFile;
 }
 
-function getDepth(rootDir: Directory, currentDepth: number) {
-  rootDir.files.map((file) => (file.depth = currentDepth++));
-  rootDir.dirs.map((dir) => {
-    dir.depth = currentDepth++;
-    getDepth(dir, currentDepth);
+function getDepth(rootDir: Directory, curDepth: number) {
+  rootDir.files.forEach((file) => {
+    file.depth = curDepth + 1;
+  });
+  rootDir.dirs.forEach((dir) => {
+    dir.depth = curDepth + 1;
+    getDepth(dir, curDepth + 1);
   });
 }
 
@@ -106,6 +108,22 @@ export function buildFileTree(data: RemoteFile[]): Directory {
       depth: 0,
     };
     cache.set(newFile.id, newFile);
+  });
+  cache.forEach((value) => {
+    if (value.parentId !== "0") {
+      const parentDir = cache.get(value.parentId as string) as Directory;
+      if (value.type === Type.DIRECTORY) {
+        parentDir.dirs.push(value as Directory);
+      } else {
+        parentDir.files.push(value as File);
+      }
+    } else {
+      if (value.type === Type.DIRECTORY) {
+        rootDir.dirs.push(value as Directory);
+      } else {
+        rootDir.files.push(value as File);
+      }
+    }
   });
   getDepth(rootDir, 0);
   return rootDir;

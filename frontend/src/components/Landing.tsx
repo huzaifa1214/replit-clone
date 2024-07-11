@@ -65,7 +65,7 @@ function getRandomSlug() {
 }
 
 const Landing = () => {
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState("node");
   const [replId, setReplId] = useState(getRandomSlug());
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ const Landing = () => {
         value={language}
         onChange={(e) => setLanguage(e.target.value)}
       >
-        <option value="node-js">Node.js</option>
+        <option value="node">Node.js</option>
         <option value="python">Python</option>
       </StyledSelect>
       <StyledButton onClick={handleProjectCreate} disabled={loading}>

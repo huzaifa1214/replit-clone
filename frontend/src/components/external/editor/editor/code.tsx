@@ -26,7 +26,6 @@ const Code = ({
   else if (language === "ts") language = "typescript";
   else if (language === "js") language = "javascript";
 
-  3;
   return (
     <Editor
       height="100vh"
@@ -34,10 +33,7 @@ const Code = ({
       value={selectedFile.content}
       theme="vs-dark"
       onChange={debounce((value) => {
-        socket.emit("updateContent", {
-          path: selectedFile.path,
-          content: value,
-        });
+        socket.emit("updateContent", selectedFile.path, value);
       }, 500)}
     />
   );

@@ -42,9 +42,11 @@ export const TerminalComponent = ({ socket }: { socket: Socket }) => {
       }
     }
 
-    socket.emit("terminalData", {
-      data: "/n",
+    terminal.onData((data) => {
+      socket.emit("terminalData", data);
     });
+
+    socket.emit("terminalData", "\n");
 
     return () => {
       socket.off("terminal");

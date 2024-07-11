@@ -41,7 +41,7 @@ function useSocket(replId: string) {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const newSocket = io(`${EXECUTION_ENGINE_URI}?roomId${replId}`);
+    const newSocket = io(`${EXECUTION_ENGINE_URI}?replId=${replId}`);
 
     setSocket(newSocket);
 
