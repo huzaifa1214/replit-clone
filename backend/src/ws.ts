@@ -23,7 +23,10 @@ export function initWs(httpServer: HttpServer) {
       terminalManager.clear(socket.id);
       return;
     }
-    await fetchS3Folder(`code/${replId}`, `../tmp/${replId}`);
+    await fetchS3Folder(
+      `code/${replId}`,
+      path.join(__dirname, `../tmp/${replId}`)
+    );
     socket.emit("loaded", {
       rootContent: await fetchDir(path.join(__dirname, `../tmp/${replId}`), ""),
     });
@@ -52,7 +55,7 @@ function initHandlers(socket: Socket, replId: string) {
   socket.on("updateContent", async (filePath: string, content: string) => {
     const fullPath = path.join(__dirname, `../tmp/${replId}/${filePath}`);
     await saveFile(fullPath, content);
-    await saveToS3(`code/${replId}/${filePath}`, filePath, content);
+    await saveToS3(`code/${replId}`, filePath, content);
   });
 
   socket.on("requestTerminal", () => {
